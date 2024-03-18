@@ -51,5 +51,24 @@ Este proyecto es un sistema básico de registro e inicio de sesión para una apl
 
 ## Consideraciones
 
-Este proyecto es un ejemplo básico y requiere mejoras de seguridad antes de ser utilizado en un entorno de producción. Se recomienda implementar medidas de seguridad adicionales y validación de datos en el lado del servidor.
+Las sentencias preparadas, también conocidas como consultas parametrizadas, son una característica de los sistemas de gestión de bases de datos que permiten ejecutar sentencias SQL de manera más segura y eficiente. Estas sentencias funcionan separando la consulta SQL de los datos que se van a insertar, actualizar, seleccionar o borrar. En lugar de integrar directamente los datos en la consulta, se utilizan placeholders (marcadores de posición o parámetros) que luego se reemplazan con los datos reales antes de que la consulta se ejecute en la base de datos.
 
+### Cómo Funcionan las consultas parametrizadas
+
+El proceso de uso de sentencias preparadas se puede describir en los siguientes pasos:
+
+1. **Preparación de la sentencia**: Se envía una consulta SQL al servidor de la base de datos, donde los valores que normalmente serían insertados directamente en la consulta se reemplazan con marcadores de posición. Por ejemplo, en lugar de una consulta como `INSERT INTO users (username, password) VALUES ('user', 'password')`, tendrías algo como `INSERT INTO users (username, password) VALUES (?, ?)`.
+
+2. **Vinculación de parámetros**: Luego de preparar la consulta, los valores reales se vinculan a los marcadores de posición. Este paso se realiza sin necesidad de concatenar los valores dentro de la consulta, lo que evita el riesgo de inyección SQL.
+
+3. **Ejecución de la consulta**: Finalmente, la consulta se ejecuta en el servidor de la base de datos. Dado que la consulta fue definida antes de que los valores fueran vinculados, el servidor de la base de datos puede tratar los valores vinculados exclusivamente como datos, sin interpretarlos como parte del SQL.
+
+### Por qué las consultas parametrizadas evitan inyecciones SQL
+
+Las sentencias preparadas evitan inyecciones SQL porque al separar los datos de la estructura de la consulta SQL, se elimina el riesgo de que los datos del usuario modifiquen la intención de la consulta mediante la inyección de SQL malicioso.
+  
+Además, los valores vinculados a la consulta se tratan siempre como datos, no como código SQL que pueda ser ejecutado. Esto significa que cualquier intento de inyectar SQL a través de los datos será tratado como una cadena de texto simple y no como parte del comando SQL.
+  
+Finalmente, las sentencias preparadas manejan automáticamente el escapado de caracteres especiales en los valores de los datos, reduciendo aún más la posibilidad de inyección SQL.
+
+Gracias a estas características, las sentencias preparadas son consideradas una de las prácticas más efectivas en la protección contra las inyecciones SQL, ayudando a asegurar que las aplicaciones web sean más seguras y resistentes a este tipo de ataques.
